@@ -14,7 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
-    TZ: Asia/Shanghai
 
     steps:
     - name: Checkout
@@ -30,7 +29,6 @@ jobs:
         sudo -E apt-get -qq install autoconf automake binutils bison bzip2 cpio curl flex gawk git haveged libncurses5-dev libncursesw5-dev libpython3-dev libssl-dev libtool p7zip p7zip-full patch pkgconf python3 python3-setuptools rsync squashfs-tools swig texinfo upx-ucl unzip vim wget xxd zlib1g-dev
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        sudo timedatectl set-timezone "$TZ"
 
     - name: Update feeds
       run: |

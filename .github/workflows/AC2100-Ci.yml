@@ -10,14 +10,10 @@ on:
   release:
     types: [published]
 
-env:
-  REPO_URL: https://github.com/andrewlsa/openwrt
-  REPO_BRANCH: main
-  TZ: Asia/Shanghai
-
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
     - name: Checkout
@@ -57,13 +53,13 @@ jobs:
         CONFIG_PACKAGE_luci-app-ssr-plus=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_V2ray_Plugin=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
-        CONFIG_PACKAGE_v2ray-core=y
-        CONFIG_PACKAGE_v2ray-plugin=y
+        #CONFIG_PACKAGE_v2ray-core=y
+        #CONFIG_PACKAGE_v2ray-plugin=y
         EOF
 
-          #
-          # ===============================================================
-          # 
+        #
+        # ===============================================================
+        # 
 
         sed -i 's/^[ \t]*//g' ./.config
         make defconfig

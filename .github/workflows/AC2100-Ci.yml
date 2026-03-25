@@ -42,31 +42,31 @@ jobs:
 
     - name: Generate configuration file
       run: |
-	rm -f ./.config*
-	touch ./.config
+        rm -f ./.config*
+        touch ./.config
 
         #
         # 在 cat >> .config <<EOF 到 EOF 之间粘贴你的编译配置, 需注意缩进关系
         # 例如:
 
         cat >> .config <<EOF
-	CONFIG_TARGET_ramips=y
-	CONFIG_TARGET_ramips_mt7621=y
-	CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_redmi-router-ac2100=y
+        CONFIG_TARGET_ramips=y        
+        CONFIG_TARGET_ramips_mt7621=y
+        CONFIG_TARGET_ramips_mt7621_DEVICE_xiaomi_redmi-router-ac2100=y
 
-	CONFIG_PACKAGE_luci-app-ssr-plus=y
-	CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_V2ray_Plugin=y
-	CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
-	CONFIG_PACKAGE_v2ray-core=y
-	CONFIG_PACKAGE_v2ray-plugin=y
-	EOF
+        CONFIG_PACKAGE_luci-app-ssr-plus=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_V2ray_Plugin=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
+        CONFIG_PACKAGE_v2ray-core=y
+        CONFIG_PACKAGE_v2ray-plugin=y
+        EOF
 
           #
           # ===============================================================
           # 
 
-	sed -i 's/^[ \t]*//g' ./.config
-	make defconfig
+        sed -i 's/^[ \t]*//g' ./.config
+        make defconfig
 
     - name: Make download
       run: |

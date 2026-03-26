@@ -33,7 +33,9 @@ DEFAULT_PACKAGES:=\
 	uci \
 	uclient-fetch \
 	urandom-seed \
-	urngd
+	urngd \
+    opkg \
+    luci
 
 ##@
 # @brief Default packages for @DEVICE_TYPE basic.

@@ -29,6 +29,7 @@ DEFAULT_PACKAGES:=\
 	logd \
 	mtd \
 	netifd \
+	opkg \
 	uci \
 	uclient-fetch \
 	urandom-seed \
@@ -51,14 +52,14 @@ DEFAULT_PACKAGES.nas:=\
 ##
 DEFAULT_PACKAGES.router:=\
 	dnsmasq-full \
-	firewall4 \
-	nftables \
+	firewall \
+	iptables \
 	kmod-nft-offload \
 	odhcp6c \
 	odhcpd-ipv6only \
 	ppp \
 	ppp-mod-pppoe \
-	luci-app-ssr-plus
+	luci luci-app-ssr-plus
 	
 
 ifneq ($(DUMP),)

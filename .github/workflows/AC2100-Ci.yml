@@ -77,9 +77,6 @@ jobs:
         echo "======================="
         df -h
         echo "======================="
-        du -h ./ --max-depth=1
-        du -h /mnt/openwrt/ --max-depth=1 || true
-
     - name: Upload bin directory
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'

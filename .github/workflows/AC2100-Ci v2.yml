@@ -78,24 +78,38 @@ jobs:
         df -h
         echo "======================="
 
-    - name: Upload bin directory
-      uses: actions/upload-artifact@main
-      with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/bin
-
-    - name: Organize files
-      id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+    - name: Prepare artifact
       run: |
-        cd openwrt/bin/targets/*/*
-        rm -rf packages
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "status=success" >> $GITHUB_OUTPUT
+        mkdir -p ./artifact/firmware
+        mkdir -p ./artifact/package
+        mkdir -p ./artifact/buildinfo
+        cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+        cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+        cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
 
-    - name: Upload firmware directory
+    - name: Deliver buildinfo
       uses: actions/upload-artifact@main
-      if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: ${{ env.FIRMWARE }}
+        name: OpenWrt_buildinfo
+        path: ./artifact/buildinfo/
+
+    - name: Deliver package
+      uses: actions/upload-artifact@main
+      with:
+        name: OpenWrt_package
+        path: ./artifact/package/
+
+    - name: Deliver firmware
+      uses: actions/upload-artifact@main
+      with:
+        name: OpenWrt_firmware
+        path: ./bin/targets/
+
+    - name: Upload release asset
+      if: github.event == 'release'
+      uses: svenstaro/upload-release-action@main
+      with:
+        repo_token: ${{ secrets.YOURTOKEN }}
+        file: ./artifact/firmware/*
+        tag: ${{ github.ref }}
+        file_glob: true

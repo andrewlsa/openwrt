@@ -21,6 +21,7 @@ DEVICE_TYPE?=router
 DEFAULT_PACKAGES:=\
 	base-files \
 	ca-bundle \
+	curl \
 	dropbear \
 	fstools \
 	libc \
@@ -33,7 +34,8 @@ DEFAULT_PACKAGES:=\
 	uci \
 	uclient-fetch \
 	urandom-seed \
-	urngd 
+	urngd \
+	luci
 
 ##@
 # @brief Default packages for @DEVICE_TYPE basic.
@@ -59,7 +61,7 @@ DEFAULT_PACKAGES.router:=\
 	odhcpd-ipv6only \
 	ppp \
 	ppp-mod-pppoe \
-	luci-base luci-compat luci-app-ssr-plus
+	luci luci-base luci-compat luci-app-ssr-plus
 	
 
 ifneq ($(DUMP),)

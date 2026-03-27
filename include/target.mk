@@ -61,7 +61,7 @@ DEFAULT_PACKAGES.router:=\
 	odhcpd-ipv6only \
 	ppp \
 	ppp-mod-pppoe \
-	luci luci-base luci-compat luci-app-ssr-plus
+	luci luci-base luci-compat
 	
 
 ifneq ($(DUMP),)

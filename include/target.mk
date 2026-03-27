@@ -33,9 +33,7 @@ DEFAULT_PACKAGES:=\
 	uci \
 	uclient-fetch \
 	urandom-seed \
-	urngd \
-    opkg \
-    luci
+	urngd 
 
 ##@
 # @brief Default packages for @DEVICE_TYPE basic.
@@ -61,7 +59,7 @@ DEFAULT_PACKAGES.router:=\
 	odhcpd-ipv6only \
 	ppp \
 	ppp-mod-pppoe \
-	luci luci-app-ssr-plus
+	luci-base luci-compat luci-app-ssr-plus
 	
 
 ifneq ($(DUMP),)

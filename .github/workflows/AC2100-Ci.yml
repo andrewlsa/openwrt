@@ -31,7 +31,7 @@ jobs:
       uses: actions/checkout@main
 
     - name: Cache
-      uses: stupidloud/cachewrtbuild@main
+      uses: klever1988/cachewrtbuild@main
       with:
         ccache: 'true'
         prefix: ${{ GitHub.workspace }}/openwrt

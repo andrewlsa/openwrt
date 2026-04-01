@@ -1,5 +1,5 @@
 
-name: OpenWrt Builder
+name: OpenWrt AC2100
 
 on:
   push:
@@ -13,10 +13,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Initialization environment
       env:
+        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL

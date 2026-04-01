@@ -55,7 +55,6 @@ DEFAULT_PACKAGES.nas:=\
 DEFAULT_PACKAGES.router:=\
 	dnsmasq-full \
 	firewall \
-	firewall4 \
 	nftables \
 	iptables \
 	kmod-nft-offload \

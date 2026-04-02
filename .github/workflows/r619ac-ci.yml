@@ -1,0 +1,100 @@
+
+name: OpenWrt AC2100
+
+on:
+  push:
+    branches: 
+      - main
+  # schedule:
+  #   - cron: 0 20 * * *
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Initialization environment
+      env:
+        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+        sudo docker image prune --all --force
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install autoconf automake binutils bison bzip2 cpio curl flex gawk git haveged libncurses5-dev libncursesw5-dev libpython3-dev libssl-dev libtool p7zip p7zip-full patch pkgconf python3 python3-setuptools python3-pkg-resources rsync squashfs-tools swig texinfo upx-ucl unzip vim wget xxd zlib1g-dev
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        df -h
+
+    - name: Checkout
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 0
+
+    - name: Cache
+      uses: klever1988/cachewrtbuild@main
+      with:
+        ccache: 'true'
+
+    - name: Update feeds
+      run: |
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+
+    - name: Generate configuration file
+      run: |
+        rm -f ./.config*
+        touch ./.config
+
+        #
+        # 在 cat >> .config <<EOF 到 EOF 之间粘贴你的编译配置, 需注意缩进关系
+        # 例如:
+
+        cat >> .config <<EOF
+        CONFIG_TARGET_ipq40xx=y
+        CONFIG_TARGET_ipq40xx_generic=y
+        CONFIG_TARGET_ipq40xx_generic_DEVICE_p2w_r619ac-128m=y
+
+        CONFIG_PACKAGE_luci-app-ssr-plus=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_V2ray_Plugin=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
+        #CONFIG_PACKAGE_v2ray-core=y
+        #CONFIG_PACKAGE_v2ray-plugin=y
+        EOF
+
+        #
+        # ===============================================================
+        # 
+
+        sed -i 's/^[ \t]*//g' ./.config
+        make defconfig
+
+    - name: Make download
+      run: |
+        make download -j8 || make download -j1 V=s
+        rm -rf $(find ./dl/ -size -1024c)
+        df -h
+
+    - name: Compile firmware
+      run: |
+        make -j$(nproc) || make -j1 V=s
+        echo "======================="
+        echo "Space usage:"
+        echo "======================="
+        df -h
+        echo "======================="
+        du -h ./ --max-depth=1
+        du -h /mnt/openwrt/ --max-depth=1 || true
+
+    - name: Prepare artifact
+      run: |
+        mkdir -p ./artifact/firmware
+        cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+
+    - name: Deliver firmware
+      uses: actions/upload-artifact@main
+      with:
+        name: OpenWrt_firmware
+        path: ./bin/targets/

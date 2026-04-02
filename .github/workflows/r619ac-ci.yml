@@ -1,5 +1,5 @@
 
-name: OpenWrt AC2100
+name: OpenWrt r619ac
 
 on:
   push:

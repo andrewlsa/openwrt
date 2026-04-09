@@ -55,7 +55,6 @@ DEFAULT_PACKAGES.nas:=\
 DEFAULT_PACKAGES.router:=\
 	dnsmasq-full \
 	firewall \
-	nftables \
 	iptables \
 	kmod-nft-offload \
 	odhcp6c \
